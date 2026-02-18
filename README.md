@@ -1,30 +1,28 @@
-# Protein-Signal-Peptide-Classification-LB2
-A machine learning project to predict secretory signal peptides using SVM and von Heijne models, featuring rigorous sequence redundancy removal via mmseqs2 and hard-negative analysis.
-# Signal Peptide Prediction (LAB2 Module 2)
+# Protein Signal Peptide Classification (LAB2 Module 2)
 
-This project builds and benchmarks two methods to predict **eukaryotic secretory signal peptides (SP)**, with a focus on robustness against **hard negatives** (N-terminal transmembrane proteins).
+This project benchmarks two methods to predict **eukaryotic secretory signal peptides (SP)**, with an emphasis on robustness against **hard negatives** (N-terminal transmembrane proteins).
 
 ## Dataset (UniProtKB)
-- **Positive set**: Eukaryota, reviewed, non-fragment, length ≥ 40 aa, protein-level evidence, experimentally supported signal peptide feature.
-- **Negative-A**: intracellular proteins (cytoplasm or nucleus), no signal peptide annotation.
-- **Negative-B (hard negatives)**: transmembrane proteins, no signal peptide annotation.
+- **Positive**: Eukaryota, reviewed, non-fragment, length ≥ 40 aa, protein-level evidence, experimentally supported SP feature.
+- **Negative-A**: intracellular proteins (cytoplasm/nucleus), no SP annotation.
+- **Negative-B (hard negatives)**: transmembrane proteins, no SP annotation.
 
-Redundancy was removed using **MMseqs2** clustering at **30% sequence identity** and **40% coverage**.
+Redundancy removal: **MMseqs2** clustering at **30% identity** and **40% coverage**.
 
 ## Models
 - **Baseline**: von Heijne statistical model (PSSM/PSWM)
-- **SVM**: RBF-kernel SVM trained on N-terminal features (amino-acid composition + mean hydrophobicity)
+- **SVM**: RBF-kernel SVM with N-terminal features (AA composition + mean hydrophobicity)
 
 ## Evaluation
-Hyperparameters (C, gamma) were optimized with **5-fold stratified cross-validation** using **MCC** on the training set.
+Hyperparameters (C, gamma) were optimized by **GridSearchCV** with **5-fold stratified CV** using **MCC** on the training set.
 Final evaluation was performed once on an independent blind test set.
 
-Key outputs:
-- `results/tables/svm_metrics.csv`
-- `results/figures/svm_roc.png`, `svm_pr.png`, `svm_cm.png`
-- `results/tables/false_positives.csv`, `false_negatives.csv`
-- Final report PDF in `report/`
+## Repository structure
+- `report/`: final PDF report
+- `results/`: figures and tables (ROC/PR/CM, metrics, FP/FN lists)
+- `lab2_clean_pipeline.py`: end-to-end pipeline script
 
 ## How to run
+Place `train_df.csv` and `test_df.csv` under `data/processed/` (see script defaults), then run:
 ```bash
 python lab2_clean_pipeline.py
